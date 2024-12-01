@@ -196,6 +196,7 @@ def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
 
         print("\nParece que los jurados eligieron distintos participantes...\nSe elegira un numero al azar y ese sera el participante ganador.")
         #VER ESTA PARTE TIRA QUE CUALQUIER PARTICIPANTE GANA
+        
         participante_ganador = lista_participantes[random.randint(0,4)]
         mostrar_ganador(participante_ganador)
 
