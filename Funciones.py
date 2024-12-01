@@ -177,6 +177,7 @@ def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
                 
     participantes = ordenar_votos_burbuja(participantes,"desc",1)
     
+
     if participantes[0][1] == 2:
         participante_ganador = guardar_participante_ganador(lista_participantes,participantes[0][0])
         mostrar_ganador(participante_ganador)
@@ -196,9 +197,10 @@ def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
 
         print("\nParece que los jurados eligieron distintos participantes...\nSe elegira un numero al azar y ese sera el participante ganador.")
         #VER ESTA PARTE TIRA QUE CUALQUIER PARTICIPANTE GANA
-        
-        participante_ganador = lista_participantes[random.randint(0,4)]
-        mostrar_ganador(participante_ganador)
+        posibles_ganadores = crear_array_bidimensional(cantidad_mejor_promedio,6)
+        posibles_ganadores = [lista_participantes[i] for i in range(cantidad_mejor_promedio)]
+        random.shuffle(posibles_ganadores)
+        mostrar_ganador(posibles_ganadores[0])
 
 def guardar_participante_ganador(lista,numero_participante):
     participante_ganador = [0,0,0,0,0,0]
