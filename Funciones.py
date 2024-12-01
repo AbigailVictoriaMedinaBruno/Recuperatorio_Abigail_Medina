@@ -89,20 +89,19 @@ def mayores_promedios(lista_participantes: list) -> None:
 
 def jurado_malo(lista_participantes: list) -> None:
 
-    lista_jurados_promedio = [0,0,0]
+    lista_jurados_promedio = [[1,0],[2,0],[3,0]]
     
     for fila in lista_participantes:
-        lista_jurados_promedio[0] += fila[1]
-        lista_jurados_promedio[1] += fila[2]
-        lista_jurados_promedio[2] += fila[3]
+        lista_jurados_promedio[0][1] += fila[1]
+        lista_jurados_promedio[1][1] += fila[2]
+        lista_jurados_promedio[2][1] += fila[3]
 
-    lista_jurados_promedio = ordenar_lista(lista_jurados_promedio,"asc") 
+    lista_jurados_promedio = ordenar_votos_burbuja(lista_jurados_promedio,"asc",1) 
         
     print("El jurado que dio las peores notas es/son:")
-
     for i in range(3):
-        if lista_jurados_promedio[i] == lista_jurados_promedio[0]:
-            print(f"Jurado {i+1}")
+        if lista_jurados_promedio[i][1] == lista_jurados_promedio[0][1]:
+            print(f"Jurado {lista_jurados_promedio[i][0]}")
     print("\n")
 
 def ordenar_lista(lista:list,orden:str) -> list:
@@ -125,7 +124,7 @@ def sumatoria(lista_participantes: list) -> None:
     
     if cantidad_acertados > 0:
         lista_participantes_numero_acertado = crear_array_bidimensional(cantidad_acertados,5)
-        for i in range(cantidad_acertados):
+        for i in range(len(lista_participantes)):
             if numero == lista_participantes[i][5]:
                 lista_participantes_numero_acertado[i] = lista_participantes[i]
         print(f"El/Los participante/s que la suma de sus notas da {numero} es/son: ")
@@ -177,32 +176,35 @@ def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
                 participantes[j][1] += 1
                 
     participantes = ordenar_votos_burbuja(participantes,"desc",1)
-
+    
     if participantes[0][1] == 2:
-        participante_ganador = guardar_participante_ganador(lista_participantes,0)
+        participante_ganador = guardar_participante_ganador(lista_participantes,participantes[0][0])
         mostrar_ganador(participante_ganador)
     elif participantes[1][1] == 2:
-        participante_ganador = guardar_participante_ganador(lista_participantes,1)
+        participante_ganador = guardar_participante_ganador(lista_participantes,participantes[1][0])
         mostrar_ganador(participante_ganador)
     elif participantes[2][1] == 2:    
-        participante_ganador = guardar_participante_ganador(lista_participantes,2)
+        participante_ganador = guardar_participante_ganador(lista_participantes,participantes[2][0])
         mostrar_ganador(participante_ganador)
     elif participantes[3][1] == 2:    
-        participante_ganador = guardar_participante_ganador(lista_participantes,3)
+        participante_ganador = guardar_participante_ganador(lista_participantes,participantes[3][0])
         mostrar_ganador(participante_ganador)
     elif participantes[4][1] == 2:    
-        participante_ganador = guardar_participante_ganador(lista_participantes,4)
+        participante_ganador = guardar_participante_ganador(lista_participantes,participantes[4][0])
         mostrar_ganador(participante_ganador)
     else:
 
         print("\nParece que los jurados eligieron distintos participantes...\nSe elegira un numero al azar y ese sera el participante ganador.")
+        #VER ESTA PARTE TIRA QUE CUALQUIER PARTICIPANTE GANA
         participante_ganador = lista_participantes[random.randint(0,4)]
         mostrar_ganador(participante_ganador)
 
-def guardar_participante_ganador(lista,indice):
+def guardar_participante_ganador(lista,numero_participante):
     participante_ganador = [0,0,0,0,0,0]
-    for i in range(len(participante_ganador)):
-        participante_ganador[i] = lista[indice][i]
+    for i in range(len(lista)):
+        if lista[i][0] == numero_participante:
+            for j in range(len(participante_ganador)):
+                participante_ganador[j] = lista[i][j]
     return participante_ganador
 
 def mostrar_ganador(participante_ganador: list) -> None: 

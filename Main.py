@@ -29,27 +29,23 @@ def menu_competencia():
                     try:
                         orden_ingresada = input("Ingrese en que orden quiere hacerlo Menor a mayor(ingrese asc) o Mayor a menor(desc):")
 
-                        if opcion != "asc" and opcion != "desc":
+                        if orden_ingresada != "asc" and orden_ingresada != "desc":
                             print(f"Las opciones disponibles de ingresar son asc o desc")
                         else:
                             break
                     except ValueError:
                         print("Por favor ingrese una frase valida.")
-                participantes_ingresados = ordenar_votos_burbuja(participantes_ingresados,orden_ingresada)
+                participantes_ingresados = ordenar_votos_burbuja(participantes_ingresados,orden_ingresada,4)
                 print("Se ordenaron los participantes por promedio de votos")
                 limpiar_consola()
             elif opcion == 4:
                 mostrar_tres_peores_promedios(participantes_ingresados)
-                limpiar_consola()
             elif opcion == 5:
                 mayores_promedios(participantes_ingresados)
-                limpiar_consola()
             elif opcion == 6:
                 jurado_malo(participantes_ingresados)
-                limpiar_consola()
             elif opcion == 7:
                 sumatoria(participantes_ingresados)
-                limpiar_consola()
             elif opcion == 8:
                 definir_ganador(participantes_ingresados)
             elif opcion == 9:
