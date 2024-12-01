@@ -12,37 +12,40 @@ def crear_array_bidimensional(filas:int, columnas:int) -> list:
         array += [fila] 
     return array
 
-def ordenar_votos_burbuja(matriz:list, orden:str) -> list:
+def ordenar_votos_burbuja(matriz:list, orden:str, clave:int) -> list:
     largo_matriz = len(matriz)
 
     for i in range(largo_matriz):
         for j in range(0, largo_matriz-i-1):
-            if (orden == 'asc' and matriz[j][4] > matriz[j+1][4]) or (orden == 'desc' and matriz[j][4] < matriz[j+1][4]):
+            if (orden == 'asc' and matriz[j][clave] > matriz[j+1][clave]) or (orden == 'desc' and matriz[j][clave] < matriz[j+1][clave]):
                 matriz[j], matriz[j+1] = matriz[j+1], matriz[j]
 
     return matriz
 
 def cargar_notas_participantes(lista_participantes:list) -> list:
-    for i in range(len(lista_participantes)):
-        print(f"Empecemos por el participante N°{i+1}")
-        lista_participantes[i][0] = i+1
-        lista_participantes[i][1] = int(input("Ingrese el voto del 1er jurado(de 1 a 100): "))
-        while lista_participantes[i][1] < 0 or lista_participantes[i][1] > 100:
-            lista_participantes[i][1] = int(input("Ingrese nuevamente el voto del 1er jurado(debe ser de 1 a 100): "))
-        
-        lista_participantes[i][2] = int(input("Ingrese el voto del 2do jurado(de 1 a 100): "))
-        while lista_participantes[i][2] < 0 or lista_participantes[i][2] > 100:
-            lista_participantes[i][2] = int(input("Ingrese nuevamente el voto del 2do jurado(debe ser de 1 a 100): "))
 
-        
-        lista_participantes[i][3] = int(input("Ingrese el voto del 3er jurado(de 1 a 100): "))
-        while lista_participantes[i][3] < 0 or lista_participantes[i][3] > 100:
-            lista_participantes[i][3] = int(input("Ingrese nuevamente el voto del 3er jurado(debe ser de 1 a 100): "))
+    for i in range(len(lista_participantes)):
+        lista_participantes[i][0] = i+1
+
+        print(f"Empecemos por el participante N°{i+1}")
+
+        for j in range(1,4):
+            while True:
+                    try:
+                        lista_participantes[i][j] = int(input(f"Ingrese el voto del jurado nro {j}(del 1 a 100): "))
+                        if lista_participantes[i][j] < 1 or lista_participantes[i][j] > 100:
+                            print(f"Sólo se pueden ingresar numeros del 1 al 100")
+                        else:
+                            break
+                    except ValueError:
+                        print("Por favor ingrese un número válido.")
 
         lista_participantes[i][5] = lista_participantes[i][1] + lista_participantes[i][2] + lista_participantes[i][3]
         promedio_participante = (lista_participantes[i][5] / 3)
         lista_participantes[i][4] = promedio_participante
+
         print("\n")
+        
     return lista_participantes
 
 def mostrar_notas(lista_participantes: list,cantidad_participantes: int) -> None:
@@ -61,15 +64,18 @@ def mostrar_notas(lista_participantes: list,cantidad_participantes: int) -> None
         print("\n")
 
 def mostrar_tres_peores_promedios(lista_participantes:list) -> None:
-    lista_participantes_ordenada = ordenar_votos_burbuja(lista_participantes,"asc")     
+
+    lista_participantes_ordenada = ordenar_votos_burbuja(lista_participantes,"asc",4)     
     
     print("Los 3 peores promedios son: ")
     mostrar_notas(lista_participantes_ordenada,3)
 
 def mayores_promedios(lista_participantes: list) -> None:
-    lista_participantes_ordenada = ordenar_votos_burbuja(lista_participantes,"desc")
+
+    lista_participantes_ordenada = ordenar_votos_burbuja(lista_participantes,"desc",4)
     cantidad_mayor_promedio = 0 
     promedio_total = 0
+
     for fila in lista_participantes_ordenada:
         promedio_total += fila[4]
     promedio_total /= 5
@@ -77,10 +83,12 @@ def mayores_promedios(lista_participantes: list) -> None:
     for fila in lista_participantes_ordenada:
         if fila[4] > promedio_total:
             cantidad_mayor_promedio += 1
+
     print(f"Los {cantidad_mayor_promedio} mejores promedios son: ")
     mostrar_notas(lista_participantes_ordenada,cantidad_mayor_promedio)
 
 def jurado_malo(lista_participantes: list) -> None:
+
     lista_jurados_promedio = [0,0,0]
     
     for fila in lista_participantes:
@@ -91,6 +99,7 @@ def jurado_malo(lista_participantes: list) -> None:
     lista_jurados_promedio = ordenar_lista(lista_jurados_promedio,"asc") 
         
     print("El jurado que dio las peores notas es/son:")
+
     for i in range(3):
         if lista_jurados_promedio[i] == lista_jurados_promedio[0]:
             print(f"Jurado {i+1}")
@@ -124,9 +133,9 @@ def sumatoria(lista_participantes: list) -> None:
     else:
         print(f"Error: Ningun participánte coincide la suma de sus notas con el número ingresado.")
 
-def definir_ganador(lista_participantes: list) -> None: 
+def definir_ganador(lista_participantes: list) -> None:
     cantidad_mejor_promedio = 0
-    lista_participantes = ordenar_votos_burbuja(lista_participantes,"desc")
+    lista_participantes = ordenar_votos_burbuja(lista_participantes,"desc",4)
     
     for fila in lista_participantes:
         if lista_participantes[0][0] != fila[0]:
@@ -140,24 +149,35 @@ def definir_ganador(lista_participantes: list) -> None:
         mostrar_notas(lista_participantes,1)
 
 def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
+    limpiar_consola()
+
     jurados = [0,0,0]
     participantes = crear_array_bidimensional(5,2)
     participante_ganador = [0,0,0,0,0,0]
+    ganadores = [lista_participantes[i][0] for i in range(cantidad_mejor_promedio)]
 
     print("Los siguientes participantes tuvieron la mejor nota: ")
     mostrar_notas(lista_participantes,cantidad_mejor_promedio)
     print("Es hora de desempatar... Jurados, elijan al participante que desee que gane: ")
         
     for i in range(3):
-        jurados[i] = int(input(f"Jurado {i+1}: Ingrese el numero de participante que desea que gane: "))
+        while True:
+            try:
+                jurados[i] = int(input(f"Jurado {i+1}: Ingrese el numero de participante que desea que gane: "))
+
+                if jurados[i] not in ganadores:
+                    print(f"¡Este participante no es un ganador! Elija uno de los siguientes ganadores: {ganadores}")
+                else:
+                    break
+            except ValueError:
+                print("Por favor ingrese un número válido.")
         for j in range(len(participantes)):
             participantes[j][0] = j+1
             if jurados[i] == j+1:
                 participantes[j][1] += 1
                 
-        print(participantes)
-    participantes = ordenar_votos_burbuja(participantes,len(participantes))
-    
+    participantes = ordenar_votos_burbuja(participantes,"desc",1)
+
     if participantes[0][1] == 2:
         participante_ganador = guardar_participante_ganador(lista_participantes,0)
         mostrar_ganador(participante_ganador)
@@ -174,9 +194,9 @@ def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
         participante_ganador = guardar_participante_ganador(lista_participantes,4)
         mostrar_ganador(participante_ganador)
     else:
-        print("Parece que los jurados eligieron distintos participantes...\nSe elegira un numero al azar y ese sera el participante ganador.")
+
+        print("\nParece que los jurados eligieron distintos participantes...\nSe elegira un numero al azar y ese sera el participante ganador.")
         participante_ganador = lista_participantes[random.randint(0,4)]
-        print(participante_ganador)
         mostrar_ganador(participante_ganador)
 
 def guardar_participante_ganador(lista,indice):
