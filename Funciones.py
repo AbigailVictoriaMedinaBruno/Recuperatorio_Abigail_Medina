@@ -123,14 +123,17 @@ def sumatoria(lista_participantes: list) -> None:
             cantidad_acertados += 1
     
     if cantidad_acertados > 0:
-        lista_participantes_numero_acertado = crear_array_bidimensional(cantidad_acertados,5)
+        lista_participantes_numero_acertado = crear_array_bidimensional(cantidad_acertados,6)
+        j = 0
         for i in range(len(lista_participantes)):
             if numero == lista_participantes[i][5]:
-                lista_participantes_numero_acertado[i] = lista_participantes[i]
+                lista_participantes_numero_acertado[j] = lista_participantes[i]
+                j += 1
+
         print(f"El/Los participante/s que la suma de sus notas da {numero} es/son: ")
         mostrar_notas(lista_participantes_numero_acertado,cantidad_acertados)
     else:
-        print(f"Error: Ningun participánte coincide la suma de sus notas con el número ingresado.")
+        print(f"Error: Ningun participante coincide la suma de sus notas con el número ingresado.")
 
 def definir_ganador(lista_participantes: list) -> None:
     cantidad_mejor_promedio = 0
@@ -142,10 +145,10 @@ def definir_ganador(lista_participantes: list) -> None:
                 cantidad_mejor_promedio += 1
         
     if cantidad_mejor_promedio > 0:
-        desempatar(lista_participantes, cantidad_mejor_promedio+1)
+        return desempatar(lista_participantes, cantidad_mejor_promedio+1)
     else: 
         print("El ganador del concurso es: ")
-        mostrar_notas(lista_participantes,1)
+        return lista_participantes[0]
 
 def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
     limpiar_consola()
@@ -180,27 +183,27 @@ def desempatar(lista_participantes: list, cantidad_mejor_promedio:int):
 
     if participantes[0][1] == 2:
         participante_ganador = guardar_participante_ganador(lista_participantes,participantes[0][0])
-        mostrar_ganador(participante_ganador)
+        return participante_ganador
     elif participantes[1][1] == 2:
         participante_ganador = guardar_participante_ganador(lista_participantes,participantes[1][0])
-        mostrar_ganador(participante_ganador)
+        return participante_ganador
     elif participantes[2][1] == 2:    
         participante_ganador = guardar_participante_ganador(lista_participantes,participantes[2][0])
-        mostrar_ganador(participante_ganador)
+        return participante_ganador
     elif participantes[3][1] == 2:    
         participante_ganador = guardar_participante_ganador(lista_participantes,participantes[3][0])
-        mostrar_ganador(participante_ganador)
+        return participante_ganador
     elif participantes[4][1] == 2:    
         participante_ganador = guardar_participante_ganador(lista_participantes,participantes[4][0])
-        mostrar_ganador(participante_ganador)
+        return participante_ganador
     else:
 
         print("\nParece que los jurados eligieron distintos participantes...\nSe elegira un numero al azar y ese sera el participante ganador.")
-        #VER ESTA PARTE TIRA QUE CUALQUIER PARTICIPANTE GANA
+
         posibles_ganadores = crear_array_bidimensional(cantidad_mejor_promedio,6)
         posibles_ganadores = [lista_participantes[i] for i in range(cantidad_mejor_promedio)]
         random.shuffle(posibles_ganadores)
-        mostrar_ganador(posibles_ganadores[0])
+        return posibles_ganadores[0]
 
 def guardar_participante_ganador(lista,numero_participante):
     participante_ganador = [0,0,0,0,0,0]

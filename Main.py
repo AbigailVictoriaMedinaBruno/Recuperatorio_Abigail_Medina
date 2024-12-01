@@ -4,6 +4,7 @@ def menu_competencia():
     participantes_ingresados = crear_array_bidimensional(5,6)
     notas_cargadas = False
     salir = True
+    ganador_elegido = False
     while(salir):
         print("*Competencia de cocina*\n1.Cargar votos de los participantes.\n2.Mostrar Votos.\n3.Ordenar votos por nota promedio.\n4.3 Peores votos.\n5.Mayores promedios.\n6.Jurado/s malo/s.\n7.Sumatoria.\n8.Definir Ganador.\n9.Salir\n")
 
@@ -47,7 +48,10 @@ def menu_competencia():
             elif opcion == 7:
                 sumatoria(participantes_ingresados)
             elif opcion == 8:
-                definir_ganador(participantes_ingresados)
+                if ganador_elegido == False:
+                    ganador = definir_ganador(participantes_ingresados)
+                mostrar_ganador(ganador)
+                ganador_elegido = True
             elif opcion == 9:
                 salir = False
         elif opcion == 9:
